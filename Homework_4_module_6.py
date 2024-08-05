@@ -32,13 +32,22 @@ class Record: # клас запис
         self.phones.append(Phone(phone_number))
 
     def remove_phone (self, phone_number): # видалення телефону
+        phone_to_remove = None
         for phone in self.phones:
             if phone.value == phone_number:
-                self.phones.remove(phone)
-                return
-            raise ValueError("Телефон не було знайдено")
+                phone_to_remove = phone
+                break
+        
+        if phone_to_remove:
+            self.phones.remove(phone_to_remove)
+        else:
+            raise ValueError("Телефон не знайдено.")
 
-    def edit_phone (self, old_number, new_number): # зміна телефону
+    def edit_phone(self, old_number, new_number): # зміна телефону
+        if not self.find_phone(old_number):
+            raise ValueError("Старий номер телефону не знайдено.")
+        if not Phone.is_valid_phone(new_number): # Перевірка на правильність нового номера
+            raise ValueError("Новий номер телефону повинен мати 10 цифр.")
         self.remove_phone(old_number)
         self.add_phone(new_number)
 
